@@ -7,7 +7,7 @@ title: 蒲文辉
 subtitle: 一个伪文艺90后Geek
 description:
 author: Kael Pu
-language: zh-CN
+language: zh-Hans
 timezone:
 
 # URL
@@ -72,7 +72,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: maupassant
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
