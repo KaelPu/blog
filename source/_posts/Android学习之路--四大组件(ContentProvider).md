@@ -1,0 +1,39 @@
+---
+title: Android学习之路 -- 四大组件(ContentProvider)
+date: 2017-07-20 23:15:18
+tags: Android学习之路
+---
+
+### 四大组件的工作过程
+#### ContentProvider的工作机制
+ContentProvider是一种内容共享型组件, 它通过Binder向其他组件乃至其他应用提供数据. 当ContentProvider所在的进程启动时, ContentProvider会同时启动并发布到AMS中. 要注意:这个时候ContentProvider的onCreate()方法是先于Application的onCreate()执行的,这一点在四大组件是少有的现象.
+![](http://images2015.cnblogs.com/blog/902091/201612/902091-20161215233358729-353773763.png)
+1. 当一个应用启动时，入口方法是ActivityThread的main方法，其中创建ActivityThread的实例并创建主线程的消息队列；
+2. ActivityThread的attach方法中会远程调用ActivityManagerService的attachApplication，并将ApplicationThread提供给AMS，ApplicationThread主要用于ActivityThread和AMS之间的通信；
+3. ActivityManagerService的attachApplication会调用ApplicationThread的bindApplication方法，这个方法会通过H切换到ActivityThread中去执行，即调用handleBindApplication方法；
+4. handleBindApplication方法会创建Application对象并加载ContentProvider，注意是先加载ContentProvider，然后调用Application的onCreate方法。
+5.  ContentProvider启动后, 外界就可以通过它所提供的增删改查这四个接口来操作ContentProvider中的数据源, 这四个方法都是通过Binder来调用的, 外界无法直接访问ContentProvider, 它只能通过AMS根据URI来获取到对应的ContentProvider的Binder接口IContentProvider, 然后再通过IContentProvider来访问ContentProvider中的数据源.
+
+ContentProvider的android:multiprocess属性决定它是否是单实例，默认值是false，也就是默认是单实例。当设置为true时，每个调用者的进程中都存在一个ContentProvider对象。
+
+当调用ContentProvider的insert、delete、update、query方法中的任何一个时，如果ContentProvider所在的进程没有启动的话，那么就会触发ContentProvider的创建，并伴随着ContentProvider所在进程的启动。
+
+以query调用为例
+![](http://hujiaweibujidao.github.io/images/androidart_contentprovider.png)
+1. 首先会获取IContentProvider对象, 不管是通过acquireUnstableProvider()方法还是直接通过acquireProvider()方法, 他们的本质都是一样的, 最终都是通过acquireProvider方法来获取ContentProvider.
+2. ApplicationContentResolver#acquireProvider()方法并没有处理任何逻辑, 它直接调用了ActivityThread#acquireProvider()
+3. 从ActivityThread中查找是否已经存在了ContentProvider了, 如果存在那么就直接返回. ActivityThread中通过mProviderMap来存储已经启动的ContentProvider对象, 这个集合的存储类型ArrayMap<ProviderKey, ProviderClientRecord> mProviderMap. 如果目前ContentProvider没有启动, 那么就发送一个进程间请求给AMS让其启动项目目标ContentProvider, 最后再通过installProvider()方法来修改引用计数.
+4. AMS是如何启动ContentProvider的呢?首先会启动ContentProvider所在的进程, 然后再启动ContentProvider. 启动进程是由AMS#startProcessLocked()方法来完成, 其内部主要是通过Process#start()方法来完成一个新进程的启动, 新进程启动后其入口方法为ActivityThread#main()方法。
+5. ActivityThread#main()是一个静态方法, 在它的内部首先会创建ActivityThread实例并调用attach()方法来进行一系列初始化, 接着就开始进行消息循环. ActivityThread#attach()方法会将Application对象通过AMS#attachApplication方法跨进程传递给AMS, 最终AMS会完成ContentProvider的创建过程.
+6. AMS#attachApplication()方法调用了attachApplication(), 然后又调用了ApplicationThread#bindApplication(), 这个过程也属于进程通信.bindApplication()方法会发送一个BIND_APPLICATION类型的消息给mH, 这是一个Handler, 它收到消息后会调用ActivityThread#handleBindApplication()方法.
+7. ActivityThread#handlerBindApplication()则完成了Application的创建以及ContentProvider 可以分为如下四个步骤:
+	1. 创建ContentProvider和Instrumentation
+	2. 创建Application对象
+	3. 启动当前进程的ContentProvider并调用onCreate()方法. 主要内部实现是installContentProvider()完成了ContentProvider的启动工作, 首先会遍历当前进程的ProviderInfo的列表并一一调用installProvider()方法来启动他们, 接着将已经启动的ContentProvider发布到AMS中, AMS会把他们存储在ProviderMap中, 这样一来外部调用者就可以直接从AMS中获取到ContentProvider. installProvider()内部通过类加载器创建的ContentProvider实例并在方法中调用了attachInfo(), 在这内部调用了ContentProvider#onCreate()
+	4. 调用Application#onCreate()
+
+经过了上述的四个步骤, ContentProvider已经启动成功, 并且其所在的进程的Application也已经成功, 这意味着ContentProvider所在的进程已经完成了整个的启动过程, 然后其他应用就可以通过AMS来访问这个ContentProvider了.
+
+当拿到了ContentProvider以后, 就可以通过它所提供的接口方法来访问它. 这里要注意: 这里的ContentProvider并不是原始的ContentProvider. 而是ContentProvider的Binder类型对象IContentProvider, 而IContentProvider的具体实现是ContentProviderNative和ContentProvider.Transport. 后者继承了前者.
+
+如果还用query方法来解释流程: 那么最开始其他应用通过AMS获取到ContentProvider的Binder对象就是IContentProvider. 而IContentProvider的实际实现者是ContentProvider.Transport. 因此实际上外部应用调用的时候本质上会以进程间通信的方式调用ContentProvider.Transport的query()方法。

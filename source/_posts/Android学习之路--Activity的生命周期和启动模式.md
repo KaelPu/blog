@@ -1,17 +1,11 @@
 ---
-title: 《Android开发艺术探索》读书笔记
-date: 2017-10-09 00:24:13
-tags:
-toc: true
----
-十一放了八天假，也不想出去当肉饼，于是决定静下心读读书，给自己充充电。
-这本500多页的好书，买了后一直都当做案前书偶尔翻翻，每次翻都回从中收获很多。这本书非常适合有2-3年开发经验的人。它不像入门书籍那样只介绍API也不像内核书籍那样应晦涩难懂。而是深浅恰到好处既能满足开发需要也深入和很多必要的原理。就像作者介绍所说：“对于初、中级开发者来说，可以通过阅读本书更加高效地达到高级开发者的技术水平,而对于高级开发者，任然可以从书中的知识体系中获益。”
-
+title: Android学习之路 -- Activity的生命周期和启动模式
+date: 2017-03-08 00:24:13
+tags: Android学习之路
 ---
 
-### 第一章：Activity 的生命周期和启动模式
-#### 1.1 Activity的生命周期
-
+### Activity 的生命周期和启动模式
+#### Activity的生命周期
 ![Paste_Image.png](http://upload-images.jianshu.io/upload_images/1967257-e11df06aa2630194.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/600)
 
  - onCreate - 构建Activity
@@ -43,7 +37,7 @@ toc: true
   
 ---
 
-#### 1.2 Activity 启动模式
+#### Activity 启动模式
 Activity有四种启动模式，这四种启动模式决定了Activity是否需要重新创建还是复用之前已有的对象。这些已存在的对象会被放进任务栈中被管理。系统可以有多个任务栈。
 - standard - *标准模式* 该模式很简单，系统每启动一个Activity都会创建一个新的对象，谁启动了该Activity它就会被加入到启动者的任务栈中。**这里需要注意由于ApplicationContext是不包含任务栈的，所以启动标准模式的Activity时会报错。**解决这个问题的办法就是给Activity加上FLAG_ACTIVITY_NEW_TASK标记，其实这就是singleTask启动模式，**这里注意给XML添加singleTask模式也不能解决该错误，必须代码添加**后面我们会介绍。
 -
@@ -72,7 +66,7 @@ Activity有四种启动模式，这四种启动模式决定了Activity是否需�
 
 ---
 
-#### 1.3 IntentFilter的匹配规则
+#### IntentFilter的匹配规则
 启动Activity有两种方式一种显示调用，一种隐式调用。显示调用很简单，只需要指定包名和类名即可，而隐式调用需要明确的指定出组件的信息。原则上说一个Intent不应该既包含显示调用又包含隐式调用，如果两个都包含，则会以显示调用为主。这里我们主要介绍一下隐式调用。隐式调用需要Intent能够匹配所有目标组件的IntentFilter中所设置的过滤信息，如果不匹配就无法启动。IntentFilter中过滤信息有三种action、category、data。
 - action - Intent中的action必须和组件过滤规则中的其中一个action相同，换句话说Intent可以有好几个action，只要组件配了其中一个action即可匹配
 - category - Intent中的所有category必须在组件过滤规则中都存在
