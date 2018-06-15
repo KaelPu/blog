@@ -1,0 +1,68 @@
+---
+title: TrackCode 使用教程
+date: 2018-6-11 22:45:40
+tags:
+toc_number: true
+---
+
+## 介绍
+TrackCode可以快速是一个帮你快速生成时序图的工具
+简单说就是你按快捷键，TrackCode会帮你记录类和函数名 按照特定格式输出
+这种格式可以直接在Markdown中变成时序图
+具体请参见如下演示
+
+![GIF.gif](https://upload-images.jianshu.io/upload_images/1967257-e651075d2f86006a.gif?imageMogr2/auto-orient/strip)
+
+## 安装
+安装插件，由于目前是测试版， 只能通过本地安装
+下载插件:https://github.com/KaelPu/TrackCodePlugin.git
+打开Android Studio 按照下图红框点击 然后选中现在下来的 TrackCode.jar
+
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-20357b3b9b6552c2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+然后重启Android Studio
+
+## 使用
+打开任意项目工程
+在开始类中鼠标右键 就可以看到TrackCode插件
+> * Track Code 用来记录类和函数
+> * Write Note 用来写note
+
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-b5683bdd74b4baaf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+比如我们记录A类调用B类ok函数的流程，并画出流程图
+首先我们打开A类 在任意地方 点击右键Track Code
+然后我们点击ok方法跳转到B类的实现位置
+**将光标放在ok方法上**
+然后点击右键Track Code
+就完成了记录
+
+
+记录完成后 将项目目录方式切换到 project
+
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-c7d08ddb65998f2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+就能看到生成了一个 track 的目录 里面有一个 track.md文件
+这就是插件生成的文件
+
+## 生成流程图
+打开track.md 文件
+复制全部
+打开 [markdown软件](https://maxiang.io/)
+清空所有内容
+将内容粘贴进下图所示的光标区域
+
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-074b19f6e9c7cb2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+然后流程图就生成了
+
+## 导出流程图
+最右边有个大象的图标
+点击里面有导出
+当然直接截图也行
+
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-771bc5f3e16eacae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+有问题请联系279291014@qq.com karlpu
