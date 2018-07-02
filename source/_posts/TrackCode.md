@@ -5,6 +5,8 @@ tags:
 toc_number: true
 ---
 
+[English Instructions](https://www.puwenhui.com/2018/06/13/TrackCode-En/)
+
 ## 介绍
 最近看项目代码，需要画时序图帮助梳理，为了偷懒，顺手撸了一个小插件，大家有兴趣可以试试。
 TrackCode可以快速是一个帮你快速生成时序图的工具
