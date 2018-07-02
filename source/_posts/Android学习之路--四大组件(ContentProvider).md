@@ -7,7 +7,7 @@ tags: Android学习之路
 ### 四大组件的工作过程
 #### ContentProvider的工作机制
 ContentProvider是一种内容共享型组件, 它通过Binder向其他组件乃至其他应用提供数据. 当ContentProvider所在的进程启动时, ContentProvider会同时启动并发布到AMS中. 要注意:这个时候ContentProvider的onCreate()方法是先于Application的onCreate()执行的,这一点在四大组件是少有的现象.
-![](http://images2015.cnblogs.com/blog/902091/201612/902091-20161215233358729-353773763.png)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-201dfaf3b0b00382.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 1. 当一个应用启动时，入口方法是ActivityThread的main方法，其中创建ActivityThread的实例并创建主线程的消息队列；
 2. ActivityThread的attach方法中会远程调用ActivityManagerService的attachApplication，并将ApplicationThread提供给AMS，ApplicationThread主要用于ActivityThread和AMS之间的通信；
 3. ActivityManagerService的attachApplication会调用ApplicationThread的bindApplication方法，这个方法会通过H切换到ActivityThread中去执行，即调用handleBindApplication方法；
@@ -19,7 +19,7 @@ ContentProvider的android:multiprocess属性决定它是否是单实例，默认
 当调用ContentProvider的insert、delete、update、query方法中的任何一个时，如果ContentProvider所在的进程没有启动的话，那么就会触发ContentProvider的创建，并伴随着ContentProvider所在进程的启动。
 
 以query调用为例
-![](http://hujiaweibujidao.github.io/images/androidart_contentprovider.png)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-32064d612c5deb3c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 1. 首先会获取IContentProvider对象, 不管是通过acquireUnstableProvider()方法还是直接通过acquireProvider()方法, 他们的本质都是一样的, 最终都是通过acquireProvider方法来获取ContentProvider.
 2. ApplicationContentResolver#acquireProvider()方法并没有处理任何逻辑, 它直接调用了ActivityThread#acquireProvider()
 3. 从ActivityThread中查找是否已经存在了ContentProvider了, 如果存在那么就直接返回. ActivityThread中通过mProviderMap来存储已经启动的ContentProvider对象, 这个集合的存储类型ArrayMap<ProviderKey, ProviderClientRecord> mProviderMap. 如果目前ContentProvider没有启动, 那么就发送一个进程间请求给AMS让其启动项目目标ContentProvider, 最后再通过installProvider()方法来修改引用计数.

@@ -8,7 +8,7 @@ tags: Android学习之路
 #### BroadcastReceiver的工作过程
 简单回顾一下广播的使用方法, 首先定义广播接收者, 只需要继承BroadcastReceiver并重写onReceive()方法即可. 定义好了广播接收者, 还需要注册广播接收者, 分为两种静态注册或者动态注册. 注册完成之后就可以发送广播了.
 ###9.4.1 广播的注册过程
-![](http://hujiaweibujidao.github.io/images/androidart_broadcastreceiver1.png)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-2cf63d9d7d51173d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 1. 动态注册的过程是从ContextWrapper#registerReceiver()开始的. 和Activity或者Service一样. ContextWrapper并没有做实际的工作, 而是将注册的过程直接交给了ContextImpl来完成.
 2. ContextImpl#registerReceiver()方法调用了本类的registerReceiverInternal()方法.
 3. 系统首先从mPackageInfo获取到IIntentReceiver对象, 然后再采用跨进程的方式向AMS发送广播注册的请求. 之所以采用IIntentReceiver而不是直接采用BroadcastReceiver, 这是因为上述注册过程中是一个进程间通信的过程. 而BroadcastReceiver作为Android中的一个组件是不能直接跨进程传递的. 所有需要通过IIntentReceiver来中转一下.
@@ -16,7 +16,7 @@ tags: Android学习之路
 5. 由于注册广播真正实现过程是在AMS中, 因此跟进AMS中, 首先看registerReceiver()方法, 这里只关心里面的核心部分. 这段代码最终会把远程的InnerReceiver对象以及IntentFilter对象存储起来, 这样整个广播的注册就完成了.
 
 ##### 广播的发送和接收过程
-![](http://www.qingpingshan.com/uploads/allimg/160817/1619104351-1.png)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-00d1a61663661a21.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 广播的发送有几种：普通广播、有序广播和粘性广播，他们的发送/接收流程是类似的，因此
 只分析普通广播的实现。
 1. 广播的发送和接收, 本质就是一个过程的两个阶段. 广播的发送仍然开始于ContextImpl#sendBroadcase()方法, 之所以不是Context, 那是因为Context#sendBroad()是一个抽象方法. 和广播的注册过程一样, ContextWrapper#sendBroadcast()仍然什么都不做, 只是把事情交给了ContextImpl去处理.
@@ -44,4 +44,3 @@ android 3.1开始就增添了两个标记为. 分别是FLAG_INCLUDE_STOPPED_PACK
 
 开机广播同样受到了这个标志位的影响. 从Android 3.1开始处于停止状态的应用同样无法接受到开机广播, 而在android 3.1之前处于停止的状态也是可以接收到开机广播的.
 
-更多[参考1](http://szysky.com/2016/08/16/%E3%80%8AAndroid-%E5%BC%80%E5%8F%91%E8%89%BA%E6%9C%AF%E6%8E%A2%E7%B4%A2%E3%80%8B-09-%E5%9B%9B%E5%A4%A7%E7%BB%84%E4%BB%B6%E7%9A%84%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B/)[、参考2](http://www.apkbus.com/blog-705730-60429.html)[、参考3](http://www.qingpingshan.com/rjbc/az/123206.html)

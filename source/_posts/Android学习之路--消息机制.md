@@ -12,7 +12,7 @@ Android的消息机制主要是指Handler的运行机制。从开发的角度来
 - 线程是默认没有Looper的，使用Handler就必须为线程创建Looper。我们经常提到的主线程，也叫UI线程，它就是ActivityThread，被创建时就会初始化Looper。
 
 #### Android的消息机制概述
-![](http://wujingchao.com/assets/Handler%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6.png)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-35d37787c195bb80.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 - Handler的主要作用是将某个任务切换到Handler所在的线程中去执行。为什么Android要提供这个功能呢？这是因为Android规定访问UI只能通过主线程，如果子线程访问UI,程序可能会导致ANR。那我们耗时操作在子线程执行完毕后，我们需要将一些更新UI的操作切换到主线程当中去。所以系统就提供了Handler。
 - 系统为什么不允许在子线程中去访问UI呢？ 因为Android的UI控件不是线程安全的，多线程并发访问可能会导致UI控件处于不可预期的状态，为什么不加锁？因为加锁机制会让UI访问逻辑变得复杂；其次锁机制会降低UI访问的效率，因为锁机制会阻塞某些线程的执行。所以Android采用了高效的单线程模型来处理UI操作。
 - Handler创建时会采用当前线程的Looper来构建内部的消息循环系统，如果当前线程没有Looper就会报错。Handler可以通过post方法发送一个Runnable到消息队列中，也可以通过send方法发送一个消息到消息队列中，其实post方法最终也是通过send方法来完成。
@@ -87,7 +87,7 @@ Handler的工作主要包含消息的发送和接收过程。通过post的一系
 Handler发送过程仅仅是向消息队列中插入了一条消息。MessageQueue的next方法就会返回这条消息给Looper，Looper拿到这条消息就开始处理，最终消息会交给Handler的dispatchMessage()来处理，这时Handler就进入了处理消息的阶段。
 
 handler处理消息的过程
-![](http://upload-images.jianshu.io/upload_images/2534721-cde6d86b8220f4f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-214eafa0b13d9fc3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 Handler的构造方法
 1. 派生Handler的子类

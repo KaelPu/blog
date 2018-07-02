@@ -17,7 +17,7 @@ ViewRoot的实现是 ViewRootImpl 类，是连接WindowManager和DecorView的纽
 	root = new ViewRootImpl(view.getContext(),display);
 	root.setView(view,wparams, panelParentView);
 View的绘制流程是从ViewRoot的performTraversals开始的
-![](https://jakkypan.gitbooks.io/android-develop-art-discovery/content/QQ20151224-1@2x.png)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-f245ffbefe056fb6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 1. measure用来测量View的宽高
 2. layout来确定View在父容器中的位置
 3. draw负责将View绘制在屏幕上
@@ -28,7 +28,7 @@ performTraversals会依次调用 performMeasure 、 performLayout 和performDraw
 - Layout过程决定了View的四个顶点的坐标和实际View的宽高，完成后可通过 getTop 、 getBotton 、 getLeft 和 getRight 拿到View的四个定点坐标。
 
 DecorView作为顶级View，其实是一个 FrameLayout ，它包含一个竖直方向的 LinearLayout ，这个 LinearLayout 分为标题栏和内容栏两个部分。
-![](http://images2015.cnblogs.com/blog/500720/201609/500720-20160925174505236-1295369287.pn)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-a52532aa98246bae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 在Activity通过setContextView所设置的布局文件其实就是被加载到内容栏之中的。这个内容栏的id是 R.android.id.content ，通过 ``` ViewGroup content = findViewById(R.android.id.content);
 可以得到这个contentView。View层的事件都是先经过DecorView，然后才传递到子View。
@@ -48,7 +48,7 @@ SpecMode有三种：
 对于DecorView，其MeasureSpec由窗口的尺寸和其自身的LayoutParams共同确定。而View的MeasureSpec由父容器的MeasureSpec和自身的LayoutParams共同决定。
 
 View的measure过程由ViewGroup传递而来，参考ViewGroup的 measureChildWithMargins 方法，通过调用子元素的 getChildMeasureSpec 方法来得到子元素的MeasureSpec，再调用子元素的 measure 方法。
-![](http://www.qingpingshan.com/uploads/allimg/160920/0SJ34H7-3.png)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-c50ccd20a316e977.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 parentSize是指父容器中目前可使用的大小。
 
 1. 当View采用固定宽/高时（ 即设置固定的dp/px） ,不管父容器的MeasureSpec是什么，View的MeasureSpec都是EXACTLY模式，并且大小遵循我们设置的值。

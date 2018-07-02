@@ -25,7 +25,7 @@ Bundle实现了Parcelable接口，因此可以方便的在不同进程间传输�
 
 ##### 使用Messenger
 Messenger可以在不同进程间传递Message对象。是一种轻量级的IPC方案，底层实现是AIDL。它对AIDL进行了封装，使得我们可以更简便的进行IPC。
-![](http://img.blog.csdn.net/20160828161207521)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-86f4be84232b011a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 具体使用时，分为服务端和客户端：
 1. 服务端：创建一个Service来处理客户端请求，同时创建一个Handler并通过它来创建一个
 Messenger，然后再Service的onBind中返回Messenger对象底层的Binder即可。
@@ -76,7 +76,6 @@ AIDL接口中的参数除了基本类型以外都必须表明方向in/out。AIDL
 		<permission
         android:name="com.rgy.chapter_2.permisson.ACCESS_BOOK_SERVICE"
         android:protectionLevel="normal"/>
-[Android自定义权限和使用权限](http://blog.csdn.net/reboot123/article/details/14451123)
 		public IBinder onBind(Intent intent){
         int check = checkCallingOrSelefPermission("com.ryq.chapter_2.permission.ACCESS_BOOK_SERVICE");
         if(check == PackageManager.PERMISSION_DENIED){
@@ -103,7 +102,7 @@ ContentProvider是通过Uri来区分外界要访问的数据集合，例如外�
 Socket也称为“套接字”，分为流式套接字和用户数据报套接字两种，分别对应于TCP和UDP协议。Socket可以实现计算机网络中的两个进程间的通信，当然也可以在本地实现进程间的通信。我们以一个跨进程的聊天程序来演示。
 
 在远程Service建立一个TCP服务，然后在主界面中连接TCP服务。服务端Service监听本地端口，客户端连接指定的端口，建立连接成功后，拿到 Socket 对象就可以向服务端发送消息或者接受服务端发送的消息。
-[本例的客户端和服务端源代码](https://github.com/singwhatiwanna/android-art-res/tree/master/Chapter_2/src/com/ryg/chapter_2/socket)
+
 
 除了采用TCP套接字，也可以用UDP套接字。实际上socket不仅能实现进程间的通信，还可以实现设备间的通信（只要设备之间的IP地址互相可见）。
 
@@ -116,7 +115,6 @@ Socket也称为“套接字”，分为流式套接字和用户数据报套接�
 - 服务端提供一个 queryBinder 接口，这个接口能够根据业务模块的特征来返回响应的Binder对象给客户端
 - 不同的业务模块拿到所需的Binder对象就可以进行RPC了
 
-[BinderPool源码](https://github.com/singwhatiwanna/android-art-res/tree/master/Chapter_2/src/com/ryg/chapter_2/binderpool)
 
 #### 选用合适的IPC方式
-![](http://images2015.cnblogs.com/blog/757858/201604/757858-20160421103323491-1740712324.png)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-db24e1ae767a080c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)

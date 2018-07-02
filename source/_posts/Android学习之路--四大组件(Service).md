@@ -12,7 +12,7 @@ tags: Android学习之路
 两种状态是可以共存的
 
 ##### Service的启动过程
-![](http://hujiaweibujidao.github.io/images/androidart_service1.png)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-e58180e1c53e5ada.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 1. Service的启动从 ContextWrapper 的 startService 开始
 2. 在ContextWrapper中，大部分操作通过一个 ContextImpl 对象mBase实现
 3. 在ContextImpl中， mBase.startService() 会调用 startServiceCommon 方法，而
@@ -34,7 +34,7 @@ startServiceCommon方法又会通过 ActivityManagerNative.getDefault() （ 实�
 	6. 将Service对象存储到ActivityThread的一个ArrayMap中
 
 ##### Service的绑定过程
-![](http://hujiaweibujidao.github.io/images/androidart_service2.png)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-077ff376f076f959.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 和service的启动过程类似的：
 1. Service的绑定是从 ContextWrapper 的 bindService 开始
 2. 在ContextWrapper中，交给 ContextImpl 对象 mBase.bindService()

@@ -26,7 +26,7 @@ tags: Android学习之路
 - public boolean onTouchEvent(MotionEvent ev); 
 这个方法用来处理点击事件。在dispatchTouchEvent方法中调用，返回结果表示是否消耗事件。如果不消耗，则在同一个事件序列中，当前View无法再次接收到事件。
 
-![](http://7xijtp.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202015-11-14%2015.54.15.png)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-06264ace4007d4b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 点击事件的传递规则：对于一个根ViewGroup，点击事件产生后，首先会传递给他，这时候就会调用他的dispatchTouchEvent方法，如果Viewgroup的onInterceptTouchEvent方法返回true表示他要拦截事件，接下来事件就会交给ViewGroup处理，调用ViewGroup的onTouchEvent方法；如果ViewGroup的onInteceptTouchEvent方法返回值为false，表示ViewGroup不拦截该事件，这时事件就传递给他的子View，接下来子View的dispatchTouchEvent方法，如此反复直到事件被最终处理。
 
 当一个View需要处理事件时，如果它设置了OnTouchListener，那么onTouch方法会被调用，如果onTouch返回false，则当前View的onTouchEvent方法会被调用，返回true则不会被调用，同时，在onTouchEvent方法中如果设置了OnClickListener，那么他的onClick方法会被调用。==由此可见处理事件时的优先级关系： onTouchListener > onTouchEvent >onClickListener==
@@ -51,7 +51,7 @@ tags: Android学习之路
 在界面中，只要内外两层同时可以滑动，这个时候就会产生滑动冲突。滑动冲突的解决有固定的方法。
 
 ##### 常见的滑动冲突场景
-![](http://static.oschina.net/uploads/img/201511/01205227_RmWK.jpg)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-12ace9e2f05b5fb9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 1. 外部滑动和内部滑动方向不一致；
 比如viewpager和listview嵌套，但这种情况下viewpager自身已经对滑动冲突进行了处理。
 2. 外部滑动方向和内部滑动方向一致；

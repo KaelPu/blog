@@ -102,7 +102,7 @@ Serializable 是Java的序列化接口，使用简单但开销大，序列化和
 ##### Binder
 Binder是Android中的一个类，实现了 IBinder 接口。从IPC角度说，Binder是Andoird的一种跨进程通讯方式，Binder还可以理解为一种虚拟物理设备，它的设备驱动是/dev/binder。从Android Framework角度来说，Binder是 ServiceManager 连接各种Manager( ActivityManager· 、 WindowManager )和相应 ManagerService 的桥梁。从Android应用层来说，Binder是客户端和服务端进行通信的媒介，当bindService时，服务端返回一个包含服务端业务调用的Binder对象，通过这个Binder对象，客户端就可以获取服务器端提供的服务或者数据（ 包括普通服务和基于AIDL的服务）。
 
-![](http://gityuan.com/images/binder/prepare/IPC-Binder.jpg)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-bb024c16e0df187c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 > Binder通信采用C/S架构，从组件视角来说，包含Client、Server、ServiceManager以及binder驱动，其中ServiceManager用于管理系统中的各种服务。
 
 >图中的Client,Server,Service Manager之间交互都是虚线表示，是由于它们彼此之间不是直接交互的，而是都通过与Binder驱动进行交互的，从而实现IPC通信方式。其中Binder驱动位于内核空间，Client,Server,Service Manager位于用户空间。Binder驱动和Service Manager可以看做是Android平台的基础架构，而Client和Server是Android的应用层，开发人员只需自定义实现client、Server端，借助Android的基本平台架构便可以直接进行IPC通信。
@@ -125,7 +125,7 @@ IBookManager继承了 IInterface 接口，所有在Binder中传输的接口都�
     - 这个接口的核心实现就是它的内部类 Stub 和 Stub 的内部代理类 Proxy 。
 
 **Stub和Proxy类的内部方法和定义**
-![](http://upload-images.jianshu.io/upload_images/1944615-3c92d9d160957e78.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![image.png](https://upload-images.jianshu.io/upload_images/1967257-ac925f3529ab0124.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 1. DESCRIPTOR
 Binder的唯一标识，一般用Binder的类名表示。
 2. asInterface(android.os.IBinder obj)
